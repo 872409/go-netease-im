@@ -12,24 +12,24 @@ const (
 )
 
 const (
-	//RoomModeDuet 双人模式
+	// RoomModeDuet 双人模式
 	RoomModeDuet = iota + 1
-	//RoomModeMulti 多人模式
+	// RoomModeMulti 多人模式
 	RoomModeMulti
 )
 
 const (
-	//RoomStatusInit 初始状态
+	// RoomStatusInit 初始状态
 	RoomStatusInit = iota + 1
-	//RoomStatusRunning 进行中
+	// RoomStatusRunning 进行中
 	RoomStatusRunning
-	//RoomStatusEnded 正常结束
+	// RoomStatusEnded 正常结束
 	RoomStatusEnded
-	//RoomStatusException 异常结束
+	// RoomStatusException 异常结束
 	RoomStatusException
 )
 
-//GetRoomInfo .
+// GetRoomInfo .
 func (c *ImClient) GetRoomInfo(roomID string) (*RoomInfo, error) {
 	param := map[string]string{"id": roomID}
 
@@ -54,7 +54,7 @@ func (c *ImClient) GetRoomInfo(roomID string) (*RoomInfo, error) {
 	return ri, nil
 }
 
-//GetRoomMembers .
+// GetRoomMembers .
 // func (c *ImClient) GetRoomMembers(roomID string) {
 // 	c.setCommonHead()
 // 	param := map[string]string{"id": roomID}
@@ -65,7 +65,7 @@ func (c *ImClient) GetRoomInfo(roomID string) (*RoomInfo, error) {
 // 	resp, err := client.Get(roomMembersPoint)
 // }
 
-//DeleteRoom 删除某个房间
+// DeleteRoom 删除某个房间
 func (c *ImClient) DeleteRoom(roomID string) error {
 	param := map[string]string{"id": roomID}
 

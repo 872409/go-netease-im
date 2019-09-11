@@ -1,8 +1,8 @@
 package netease
 
 import (
-	"encoding/json"
 	"errors"
+	"fmt"
 	"strconv"
 
 	"github.com/json-iterator/go"
@@ -12,9 +12,10 @@ const (
 	neteaseBaseURL    = "https://api.netease.im/nimserver"
 	createImUserPoint = neteaseBaseURL + "/user/create.action"
 	refreshTokenPoint = neteaseBaseURL + "/user/refreshToken.action"
+	updateTokenPoint  = neteaseBaseURL + "/user/update.action"
 )
 
-//CreateImUser 创建网易云通信ID
+// CreateImUser 创建网易云通信ID
 /**
  * @param accid 网易云通信ID，最大长度32字符，必须保证一个APP内唯一（只允许字母、数字、半角下划线_、@、半角点以及半角-组成，不区分大小写，会统一小写处理，请注意以此接口返回结果中的accid为准）。
  * @param name 网易云通信ID昵称，最大长度64字符，用来PUSH推送时显示的昵称
@@ -29,7 +30,7 @@ const (
  * @param ex 用户名片扩展字段，最大长度1024字符，用户可自行扩展，建议封装成JSON字符串
  */
 func (c *ImClient) CreateImUser(u *ImUser) (*TokenInfo, error) {
-	param := map[string]string{"accid": u.ID}
+	param := map[string]string{"accid": u.Accid}
 
 	if len(u.Name) > 0 {
 		param["name"] = u.Name
@@ -62,43 +63,59 @@ func (c *ImClient) CreateImUser(u *ImUser) (*TokenInfo, error) {
 		param["gender"] = strconv.Itoa(u.Gender)
 	}
 
-	client := c.client.R()
-	c.setCommonHead(client)
-	client.SetFormData(param)
+	fmt.Println("CreateImUser", param)
 
-	resp, err := client.Post(createImUserPoint)
+	// client := c.client.R()
+	// c.setCommonHead(client)
+	// client.SetFormData(param)
+
+	// infoJSON, err := handleResp(client.Post(createImUserPoint))
+	infoJSON, err := c.post(createImUserPoint, param)
+
 	if err != nil {
 		return nil, err
 	}
 
-	var jsonRes map[string]*json.RawMessage
-	err = jsoniter.Unmarshal(resp.Body(), &jsonRes)
+	token := &TokenInfo{}
+	err = jsoniter.Unmarshal(*infoJSON, token)
 	if err != nil {
 		return nil, err
 	}
+	return token, nil
 
-	var code int
-	err = json.Unmarshal(*jsonRes["code"], &code)
-	if err != nil {
-		return nil, err
-	}
-
-	if code != 200 {
-		var msg string
-		json.Unmarshal(*jsonRes["desc"], &msg)
-		return nil, errors.New(msg)
-	}
-
-	tk := &TokenInfo{}
-	err = jsoniter.Unmarshal(*jsonRes["info"], tk)
-	if err != nil {
-		return nil, err
-	}
-
-	return tk, nil
+	//
+	// if err != nil {
+	// 	return nil, err
+	// }
+	//
+	// var jsonRes map[string]*json.RawMessage
+	// err = jsoniter.Unmarshal(resp.Body(), &jsonRes)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	//
+	// var code int
+	// err = json.Unmarshal(*jsonRes["code"], &code)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	//
+	// if code != 200 {
+	// 	var msg string
+	// 	json.Unmarshal(*jsonRes["desc"], &msg)
+	// 	return nil, errors.New(msg)
+	// }
+	//
+	// tk := &TokenInfo{}
+	// err = jsoniter.Unmarshal(*jsonRes["info"], tk)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	//
+	// return tk, nil
 }
 
-//RefreshToken 更新并获取新token
+// RefreshToken 更新并获取新token
 /**
  * @param accid 网易云通信ID，最大长度32字符，必须保证一个APP内唯一
  */
@@ -108,38 +125,73 @@ func (c *ImClient) RefreshToken(accid string) (*TokenInfo, error) {
 	}
 
 	param := map[string]string{"accid": accid}
-	client := c.client.R()
-	c.setCommonHead(client)
-	client.SetFormData(param)
+	// client := c.client.R()
+	// c.setCommonHead(client)
+	// client.SetFormData(param)
 
-	resp, err := client.Post(refreshTokenPoint)
+	infoJSON, err := c.post(refreshTokenPoint, param)
+
+	// infoJSON, err := handleResp(client.Post(refreshTokenPoint))
+
 	if err != nil {
 		return nil, err
 	}
 
-	var jsonRes map[string]*json.RawMessage
-	err = jsoniter.Unmarshal(resp.Body(), &jsonRes)
+	token := &TokenInfo{}
+	err = jsoniter.Unmarshal(*infoJSON, token)
 	if err != nil {
 		return nil, err
 	}
 
-	var code int
-	err = json.Unmarshal(*jsonRes["code"], &code)
+	return token, nil
+
+	//
+	// var jsonRes map[string]*json.RawMessage
+	// err = jsoniter.Unmarshal(resp.Body(), &jsonRes)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	//
+	// var code int
+	// err = json.Unmarshal(*jsonRes["code"], &code)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	//
+	// if code != 200 {
+	// 	var msg string
+	// 	json.Unmarshal(*jsonRes["desc"], &msg)
+	// 	return nil, errors.New(msg)
+	// }
+	//
+	// tk := &TokenInfo{}
+	// err = jsoniter.Unmarshal(*jsonRes["info"], tk)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	//
+	// return tk, nil
+}
+
+func (c *ImClient) UpdateToken(accid string, token string, props string) error {
+
+	if len(accid) == 0 {
+		return errors.New("必须指定网易云通信ID")
+	}
+
+	param := map[string]string{
+		"accid": accid,
+		"token": token,
+	}
+	if len(props) > 0 {
+		param["props"] = props
+	}
+
+	_, err := c.post(updateTokenPoint, param)
+
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	if code != 200 {
-		var msg string
-		json.Unmarshal(*jsonRes["desc"], &msg)
-		return nil, errors.New(msg)
-	}
-
-	tk := &TokenInfo{}
-	err = jsoniter.Unmarshal(*jsonRes["info"], tk)
-	if err != nil {
-		return nil, err
-	}
-
-	return tk, nil
+	return nil
 }

@@ -12,7 +12,7 @@ const (
 	queryMessagePoint = neteaseBaseURL + "/history/querySessionMsg.action"
 )
 
-//HistoryMessage .
+// HistoryMessage .
 type HistoryMessage struct {
 	From string      `json:"from"`
 	ID   int64       `json:"msgid"`
@@ -21,7 +21,7 @@ type HistoryMessage struct {
 	Body interface{} `json:"body"`
 }
 
-//QueryMessage 查询存储在网易云通信服务器中的单人聊天历史消息，只能查询在保存时间范围内的消息
+// QueryMessage 查询存储在网易云通信服务器中的单人聊天历史消息，只能查询在保存时间范围内的消息
 /*
 *1.跟据时间段查询点对点消息，每次最多返回100条；
 *2.不提供分页支持，第三方需要跟据时间段来查询。

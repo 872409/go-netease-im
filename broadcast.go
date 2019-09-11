@@ -12,7 +12,7 @@ const (
 	broadcastMessagePoint = neteaseBaseURL + "/msg/broadcastMsg.action"
 )
 
-//BroadcastResult 广播推送结果
+// BroadcastResult 广播推送结果
 type BroadcastResult struct {
 	BroadcastID int64    `json:"broadcastId"`
 	ExpireTime  int64    `json:"expireTime"`
@@ -22,7 +22,7 @@ type BroadcastResult struct {
 	TargetOs    []string `json:"targetOs"`
 }
 
-//BroadcastMsg 发送广播消息
+// BroadcastMsg 发送广播消息
 /*
  * *广播消息，可以对应用内的所有用户发送广播消息，广播消息目前暂不支持第三方推送（APNS、小米、华为等）
  * *广播消息支持离线存储，并可以自定义设置离线存储的有效期，最多保留最近100条离线广播消息

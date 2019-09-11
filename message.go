@@ -16,17 +16,17 @@ const (
 )
 
 const (
-	//MsgTypeText 文本消息
+	// MsgTypeText 文本消息
 	MsgTypeText = iota
-	//MsgTypeImage 图片消息
+	// MsgTypeImage 图片消息
 	MsgTypeImage
-	//MsgTypeVoice 语音消息
+	// MsgTypeVoice 语音消息
 	MsgTypeVoice
-	//MsgTypeVideo 视频消息
+	// MsgTypeVideo 视频消息
 	MsgTypeVideo
 )
 
-//SendTextMessage 发送文本消息,消息内容最长5000
+// SendTextMessage 发送文本消息,消息内容最长5000
 func (c *ImClient) SendTextMessage(fromID, toID string, msg *TextMessage, opt *ImSendMessageOption) error {
 	bd, err := jsonTool.MarshalToString(msg)
 	if err != nil {
@@ -35,7 +35,7 @@ func (c *ImClient) SendTextMessage(fromID, toID string, msg *TextMessage, opt *I
 	return c.SendMessage(fromID, toID, bd, 0, MsgTypeText, opt)
 }
 
-//SendBatchTextMessage 批量发送文本消息
+// SendBatchTextMessage 批量发送文本消息
 func (c *ImClient) SendBatchTextMessage(fromID string, toIDs []string, msg *TextMessage, opt *ImSendMessageOption) (string, error) {
 	bd, err := jsonTool.MarshalToString(msg)
 	if err != nil {
@@ -45,7 +45,7 @@ func (c *ImClient) SendBatchTextMessage(fromID string, toIDs []string, msg *Text
 	return c.SendBatchMessage(fromID, bd, toIDs, MsgTypeText, opt)
 }
 
-//SendBatchImageMessage 批量发送图片
+// SendBatchImageMessage 批量发送图片
 func (c *ImClient) SendBatchImageMessage(fromID string, toIDs []string, msg *ImageMessage, opt *ImSendMessageOption) (string, error) {
 	bd, err := jsonTool.MarshalToString(msg)
 	if err != nil {
@@ -55,7 +55,7 @@ func (c *ImClient) SendBatchImageMessage(fromID string, toIDs []string, msg *Ima
 	return c.SendBatchMessage(fromID, bd, toIDs, MsgTypeImage, opt)
 }
 
-//SendBatchVoiceMessage .
+// SendBatchVoiceMessage .
 func (c *ImClient) SendBatchVoiceMessage(fromID string, toIDs []string, msg *VoiceMessage, opt *ImSendMessageOption) (string, error) {
 	bd, err := jsonTool.MarshalToString(msg)
 	if err != nil {
@@ -65,7 +65,7 @@ func (c *ImClient) SendBatchVoiceMessage(fromID string, toIDs []string, msg *Voi
 	return c.SendBatchMessage(fromID, bd, toIDs, MsgTypeVoice, opt)
 }
 
-//SendBatchVideoMessage .
+// SendBatchVideoMessage .
 func (c *ImClient) SendBatchVideoMessage(fromID string, toIDs []string, msg *VideoMessage, opt *ImSendMessageOption) (string, error) {
 	bd, err := jsonTool.MarshalToString(msg)
 	if err != nil {
@@ -75,7 +75,7 @@ func (c *ImClient) SendBatchVideoMessage(fromID string, toIDs []string, msg *Vid
 	return c.SendBatchMessage(fromID, bd, toIDs, MsgTypeVideo, opt)
 }
 
-//SendMessage 发送普通消息
+// SendMessage 发送普通消息
 /**
  * @param fromID 发送者accid，用户帐号，最大32字符，必须保证一个APP内唯一
  * @param toID ope==0是表示accid即用户id，ope==1表示tid即群id
@@ -151,7 +151,7 @@ func (c *ImClient) SendMessage(fromID, toID, body string, ope, msgType int, opt 
 	return nil
 }
 
-//SendBatchMessage 批量发送点对点普通消息
+// SendBatchMessage 批量发送点对点普通消息
 /**
  * @param fromID 发送者accid，用户帐号，最大32字符，必须保证一个APP内唯一
  * @param toIDs ["aaa","bbb"]（JSONArray对应的accid，如果解析出错，会报414错误），限500人
@@ -214,7 +214,7 @@ func (c *ImClient) SendBatchMessage(fromID, body string, toIDs []string, msgType
 	return string(resp.Body()), nil
 }
 
-//SendBatchAttachMsg 批量发送点对点自定义系统通知
+// SendBatchAttachMsg 批量发送点对点自定义系统通知
 /**
  * @param fromID 发送者accid，用户帐号，最大32字符，必须保证一个APP内唯一
  * @param toIDs ["aaa","bbb"]（JSONArray对应的accid，如果解析出错，会报414错误），限500人
@@ -277,7 +277,7 @@ func (c *ImClient) SendBatchAttachMsg(fromID, attach string, toIDs []string, opt
 	return nil
 }
 
-//RecallMessage 消息撤回
+// RecallMessage 消息撤回
 /**
  * @param deleteMsgid 要撤回消息的msgid
  * @param timetag 要撤回消息的创建时间
