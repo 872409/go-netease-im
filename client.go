@@ -2,6 +2,8 @@ package netease
 
 import (
 	"encoding/json"
+	// "fmt"
+
 	// "encoding/json"
 	"errors"
 	"strconv"
@@ -49,16 +51,17 @@ func (c *ImClient) setCommonHead(req *resty.Request) {
 	req.SetHeader("CheckSum", ShaHashToHexStringFromString(c.AppSecret+c.Nonce+timeStamp))
 }
 
-func (c *ImClient) post(url string, fromData map[string]string) (info *json.RawMessage, err error) {
+func (c *ImClient) post(url string, fromData map[string]string, jsonResultKey string) (info *json.RawMessage, err error) {
 	client := c.client.R()
 	c.setCommonHead(client)
 	client.SetFormData(fromData)
 
-	info, err = handleResp(client.Post(url))
+	resp, err := client.Post(url)
+	info, err = handleResp(resp, err, jsonResultKey)
 	return
 }
 
-func handleResp(resp *resty.Response, respErr error) (info *json.RawMessage, err error) {
+func handleResp(resp *resty.Response, respErr error, jsonResultKey string) (info *json.RawMessage, err error) {
 	if respErr != nil {
 		return nil, respErr
 	}
@@ -82,5 +85,5 @@ func handleResp(resp *resty.Response, respErr error) (info *json.RawMessage, err
 		return nil, errors.New(msg)
 	}
 
-	return jsonRes["info"], nil
+	return jsonRes[jsonResultKey], nil
 }

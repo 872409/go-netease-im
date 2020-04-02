@@ -1,5 +1,7 @@
 module github.com/872409/go-netease-im
 
+go 1.14
+
 require (
 	github.com/go-resty/resty v1.7.0
 	github.com/json-iterator/go v0.0.0-20180701071628-ab8a2e0c74be

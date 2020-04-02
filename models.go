@@ -217,3 +217,34 @@ type RoomInfo struct {
 	CreateTime  int64  `json:"createtime"`  // 房间创建时间【int64】
 	Destroytime int64  `json:"destroytime"` // 房间结束时间【int64】
 }
+
+// RoomInfo .
+type Friend struct {
+	Faccid      string `json:"faccid"`      // 好友
+	Alias       string `json:"alias"`       // alias
+	Ex          string `json:"ex"`          // alias
+	ServerEx    string `json:"serverex"`    // alias
+	Bidirection bool   `json:"bidirection"` //
+	CreateTime  int64  `json:"createtime"`  // 房间创建时间【int64】
+}
+
+type Team struct {
+	Owner    string `json:"owner"`
+	Tname    string `json:"tname"`
+	Maxusers int    `json:"maxusers"`
+	Tid      int    `json:"tid"`
+	Size     int    `json:"size"`
+	Custom   string `json:"custom"`
+}
+
+type TeamDetail struct {
+	Team
+	Announcement string   `json:"announcement"`
+	Joinmode     int      `json:"joinmode"`
+	Intro        string   `json:"intro"`
+	ClientCustom string   `json:"clientCustom"`
+	Mute         bool     `json:"mute"`
+	Createtime   int64    `json:"createtime"`
+	Updatetime   int64    `json:"updatetime"`
+	Members      []string `json:"members"`
+}
