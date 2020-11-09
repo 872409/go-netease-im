@@ -24,6 +24,9 @@ const (
 	MsgTypeVoice
 	// MsgTypeVideo 视频消息
 	MsgTypeVideo
+	MsgTypeLocation
+	MsgTypeFile = 6
+	MsgTypeTip  = 10
 )
 
 // SendTextMessage 发送文本消息,消息内容最长5000
@@ -33,6 +36,15 @@ func (c *ImClient) SendTextMessage(fromID, toID string, msg *TextMessage, opt *I
 		return err
 	}
 	return c.SendMessage(fromID, toID, bd, 0, MsgTypeText, opt)
+}
+
+// SendTextMessage 发送文本消息,消息内容最长5000
+func (c *ImClient) SendTipMessage(fromID, toID string, msg *TextMessage, opt *ImSendMessageOption) error {
+	bd, err := jsonTool.MarshalToString(msg)
+	if err != nil {
+		return err
+	}
+	return c.SendMessage(fromID, toID, bd, 0, MsgTypeTip, opt)
 }
 
 // SendBatchTextMessage 批量发送文本消息

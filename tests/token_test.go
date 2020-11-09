@@ -8,7 +8,7 @@ import (
 	"github.com/872409/go-netease-im"
 )
 
-var client = netease.CreateImClient("d36cd5f37a0657f49b46f00cae7505f7", "570d1c015865", "")
+var client = netease.CreateImClient("dc71e882094b24b410a10183d5a7f652", "adf2279d5527", "")
 
 func init() {
 	os.Setenv("GOCACHE", "off")
